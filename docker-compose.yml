@@ -1,34 +1,33 @@
-version: "3"
-
-#TODO: add a sample nestjs project.
+version: '3.7'
 
 services:
-  postgres:
-    container_name: postgres
-    image: postgres:latest
-    ports:
-    - "5432:5432"
+  postgres_db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_DB: crud_orm # 資料庫名稱
+      POSTGRES_USER: admin # 資料庫帳號
+      POSTGRES_PASSWORD: admin # 資料庫密碼
+      PGDATA: /var/lib/postgresql/data
     volumes:
-    - /data/postgres:/data/postgres
-    env_file:
-    - docker.env
-    networks:
-    - postgres
- 
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
   pgadmin:
-    links:
-    - postgres:postgres
-    container_name: pgadmin
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:latest
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: linth@gmail.com # 使用者帳號
+      PGADMIN_DEFAULT_PASSWORD: abcd # 使用者密碼
+      PGADMIN_LISTEN_PORT: 80
     ports:
-    - "8080:80"
+      - "8081:80"
     volumes:
-    - /data/pgadmin:/root/.pgadmin
-    env_file:
-    - docker.env
-    networks:
-    - postgres
- 
-networks:
-  postgres:
-    driver: bridge
+      - pgadmin-data:/var/lib/pgadmin
+    links:
+      - "postgres_db:pgsql-server" # 在postgres下的設定: host name/address
+
+volumes:
+  db-data:
+  pgadmin-data:
