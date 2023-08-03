@@ -5,7 +5,7 @@ services:
     image: postgres:14
     restart: always
     environment:
-      POSTGRES_DB: crud_orm # 資料庫名稱
+      POSTGRES_DB: test # 資料庫名稱
       POSTGRES_USER: admin # 資料庫帳號
       POSTGRES_PASSWORD: admin # 資料庫密碼
       PGDATA: /var/lib/postgresql/data
